@@ -33,8 +33,6 @@
               (json/read-value (json/object-mapper {:decode-key-fn true}))
               :statewise)))
 
-(prn state-data)
-
 (def state-population
   "From https://en.wikipedia.org/wiki/List_of_states_and_union_territories_of_India_by_population
   with commas manually removed"
