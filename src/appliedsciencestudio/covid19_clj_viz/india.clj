@@ -2,7 +2,8 @@
   "Visualization of coronavirus situation in India.
 
   Contributed by Noor Afshan Fathima."
-  (:require [appliedsciencestudio.covid19-clj-viz.common :refer [oz-config
+  (:require [appliedsciencestudio.covid19-clj-viz.common :refer [applied-science-font
+                                                                 oz-config
                                                                  applied-science-palette]]
             [appliedsciencestudio.covid19-clj-viz.sources.johns-hopkins :as jh]
             [clojure.set :refer [rename-keys]]
@@ -136,3 +137,29 @@
                      :color {:field "country-region" :type "ordinal"
                              :scale {:range [(:purple applied-science-palette)
                                              (:green applied-science-palette)]}}}}))
+
+;;;; ===========================================================================
+;;;; Daily new cases in a particular country over the past N days
+(oz/view!
+  (merge-with merge oz-config
+              {:title {:text "Daily new confirmed COVID-19 cases"
+                       :font (:mono applied-science-font)
+                       :fontSize 30
+                       :anchor "middle"}
+               :width 500 :height 325
+               :data {:values (let [country "India"]
+                                (->> (jh/new-daily-cases-in :confirmed country)
+                                     (sort-by key #(compare %2 %1))
+                                     (take 20)
+                                     vals
+                                     (into [])
+                                     (map-indexed (fn [i n] {:cases n
+                                                             :country country
+                                                             :days-ago i}))))},
+               :mark {:type "bar" :size 24}
+               :encoding {:x {:field "days-ago" :type "ordinal"
+                              :sort "descending"}
+                          :y {:field "cases", :type "quantitative"}
+                          :tooltip {:field "cases" :type "quantitative"}
+                          :color {:field "country" :type "nominal"
+                                  :scale {:range (mapv val applied-science-palette)}}}}))

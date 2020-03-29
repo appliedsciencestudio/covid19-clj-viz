@@ -82,19 +82,21 @@
 
 (comment
   (country-totals "Germany" confirmed)
+  (country-totals "India" confirmed)
   (country-totals "Australia" deaths)
   
   (country-totals "Australia" confirmed)
   (country-totals "Australia" deaths)
   
   (new-daily-cases-in :confirmed "Germany")
+  (new-daily-cases-in :confirmed "India")
   
   (new-daily-cases-in :confirmed "Korea, South")
 
   ;; test a country with province-level data
-  (new-daily-cases-in :confirmed "Australia")
+  (new-daily-cases-in :confirmed "Australia"))
   
-  )
+
 
 (defn rate-as-of
   "Day-to-day COVID-19 case increase."
@@ -128,5 +130,6 @@
   (map (partial rate-as-of :confirmed "Germany")
        [1 2 3 5 10 20 30])
   ;; (1.272964796479648 1.254874892148404 1.263904034896401 1.768527430221367 1.30162703379224 1.703703703703704 1.0)
-  
-  )
+
+  (map (partial rate-as-of :confirmed "India")
+       [1 2 3 5 10 20 30]))
