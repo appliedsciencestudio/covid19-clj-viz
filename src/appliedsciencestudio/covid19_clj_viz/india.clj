@@ -12,9 +12,9 @@
             [oz.core :as oz]))
 
 (comment
-  (oz/start-server! 8082)
+  (oz/start-server! 8082))
 
-  )
+
 
 (defonce covid19india-json
   (slurp "https://api.covid19india.org/data.json"))
@@ -32,6 +32,8 @@
           (-> covid19india-json
               (json/read-value (json/object-mapper {:decode-key-fn true}))
               :statewise)))
+
+(prn state-data)
 
 (def state-population
   "From https://en.wikipedia.org/wiki/List_of_states_and_union_territories_of_India_by_population
@@ -72,9 +74,9 @@
                     india-geojson-with-data)
 
   ;; for inspection without flooding my REPL, we ignore the many many coordinates:
-  (map #(dissoc % :geometry) (:features india-geojson-with-data))
+  (map #(dissoc % :geometry) (:features india-geojson-with-data)))
   
-  )
+
 
 
 ;;;; ===========================================================================
