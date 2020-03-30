@@ -15,8 +15,6 @@
 (comment
   (oz/start-server! 8082))
 
-
-
 (defonce covid19india-json
   (slurp "https://api.covid19india.org/data.json"))
 
@@ -40,6 +38,11 @@
   (into {} (map (juxt :State :Population)
                 (mcsv/read-csv "resources/india.state-population.tsv"))))
 
+(def state-hospital-beds
+  "From https://en.wikipedia.org/wiki/List_of_states_and_union_territories_of_India_by_population
+  with commas manually removed"
+  (into {} (map (juxt :State :Beds)
+                (mcsv/read-csv "resources/india.state-population.tsv"))))
 
 ;;;; ===========================================================================
 ;; Minimum viable geographic visualization of India
@@ -163,3 +166,195 @@
                           :tooltip {:field "cases" :type "quantitative"}
                           :color {:field "country" :type "nominal"
                                   :scale {:range (mapv val applied-science-palette)}}}}))
+
+;;;; ===========================================================================
+;; http://www.cbhidghs.nic.in/showfile.php?lid=1147
+;; National Health Profile 2019
+;; https://pib.gov.in/PressReleasePage.aspx?PRID=1539877
+
+(def state-population-and-beds
+  (mcsv/read-csv "resources/india.state-population.tsv" {:fields [:state :population :beds]}))
+
+;; dual axis tick plot visualizing the population and hospital beds in each state of India.
+(oz/view!
+  (merge-with merge oz-config
+              {:data {:values state-population-and-beds}
+               :encoding {:x {:field "state"
+                              :axis {:domain false
+                                     :title "States"
+                                     :ticks false
+                                     :labelAngle 90
+                                     :labelPadding 10}
+                              :type "ordinal"}}
+               :layer [{:mark {:stroke "#85C5A6"
+                               :type "tick"
+                               :opacity 0.9}
+                        :encoding {:y {:aggregate "average"
+                                       :field "population"
+                                       :type "quantitative"
+                                       :axis {:title "Population"
+                                              :titleColor "#85C5A6"}}}}
+                       {:mark {:stroke "#d32f2f"
+                               :type "tick"}
+                        :encoding {:y {:aggregate "average"
+                                       :field "beds"
+                                       :type "quantitative"
+                                       :axis {:title "No. of hospital beds"
+                                              :titleColor "#d32f2f"}}}}]
+               :resolve {:scale {:y "independent"}}}))
+
+;-------------------------------------------------------------------------------------------------
+
+;;cloropleth: India map visualizing the hospital beds distribution per 1k population of each state
+
+(def india-geojson-with-beds-data
+  (update (json/read-value (java.io.File. "resources/public/public/data/india-all-states.geo.json")
+                           (json/object-mapper {:decode-key-fn true}))
+          :features
+          (fn [features]
+            (mapv (fn [feature]
+                    (let [state (:NAME_1 (:properties feature))
+                          beds (get state-hospital-beds state)]
+                      (assoc feature
+                        :State         state
+                        :beds          beds
+                        :beds-per-1k   (double (Math/ceil (/ beds
+                                                             (/ (get state-population state)
+                                                                1000)))))))
+                  features))))
+
+(comment
+  (json/write-value (java.io.File. "resources/public/public/data/india-all-states-created-with-beds.geo.json")
+                    india-geojson-with-beds-data)
+
+  ;; for inspection without flooding my REPL, we ignore the many many coordinates:
+  (map #(dissoc % :geometry) (:features india-geojson-with-beds-data)))
+
+(oz/view!
+  (merge-with merge oz-config india-dimensions
+              {:title {:text "Current India hospital beds count per 1k population"}
+               :data {:name "india"
+                      :values india-geojson-with-beds-data
+                      :format {:property "features"}},
+               :mark {:type "geoshape" :stroke "white" :strokeWidth 1}
+               :encoding {:color {:field "beds-per-1k",
+                                  :type "quantitative"
+                                  :scale {:field "cases-per-100k",
+                                          :scale {:type "log"}
+                                          :type "quantitative"}}
+                          :tooltip [{:field "State" :type "nominal"}
+                                    {:field "beds-per-1k" :type "quantitative"}]}
+               :selection {:highlight {:on "mouseover" :type "single"}}}))
+
+;------------------------------------------------------------------------------------------------------------------------------------------------------
+;;Experimentation plots, may not give the best visalizations for the data set I am considering. Still putting them here if someone wants to take a look.
+
+(def state-population-measure
+  "From https://en.wikipedia.org/wiki/List_of_states_and_union_territories_of_India_by_population"
+  (->> (mcsv/read-csv "resources/india.state-population.tsv" {:fields [:state :population :beds]})
+       (map (fn [each]
+              {:state (:state each)
+               :measure "population"
+               :count (double (/ (:population each) 100000))}))))
+
+(def state-bed-measure
+  (->> (mcsv/read-csv "resources/india.state-population.tsv" {:fields [:state :population :beds]})
+       (map (fn [each]
+              {:state (:state each)
+               :measure "beds"
+               :count (double (/ (:beds each) 100000))}))))
+;; stacked bar chart
+(oz/view!
+  (merge-with merge oz-config
+              {:data {:values (concat state-population-measure state-bed-measure)}
+               :mark {:type "bar"}
+               :encoding {:x {:aggregate "sum"
+                              :field "count"
+                              :type "quantitative"
+                              :stack "nomalize"}
+                          :y {:field "state"
+                              :type "nominal"}}
+               :color {:field "measure"
+                       :type "nominal"
+                       :scale {:range  ["#675193" "#ca8861"]}}
+               :opacity {:value 0.7}}))
+
+;; area plot
+
+(oz/view!
+  (merge-with merge oz-config
+              {:data {:values state-population-and-beds}
+               :width 600
+               :height 300
+               :mark "area"
+               :encoding {:x {:field "state"
+                              :axis {:domain false
+                                     :title "States"
+                                     :ticks false
+                                     :labelAngle 90
+                                     :labelPadding 4}
+                              :type "ordinal"}
+                          :y {:field "population"
+                              :type "quantitative"
+                              :axis {:title "Avg. Population" :titleColor "#85C5A6"}}
+                          :y2 {:field "beds"}
+                          :opacaity {:value 0.7}}}))
+
+;; dual axis bar graph
+(oz/view!
+  (merge-with merge oz-config
+              {:data {:values state-population-and-beds}
+               :encoding {:x {:field "state"
+                              :axis {:domain false
+                                     :title "States"
+                                     :ticks false
+                                     :labelAngle 90
+                                     :labelPadding 10}
+                              :type "ordinal"}}
+               :layer [{:mark {:stroke "black"
+                               :type "bar"
+                               :color "#d32f2f"
+                               :opacity 0.9}
+                        :encoding {:y {:aggregate "average"
+                                       :field "population"
+                                       :type "quantitative"
+                                       :axis {:title "Population"
+                                              :titleColor "#85C5A6"}}}}
+                       {:mark {:stroke "red"
+                               :type "bar"}
+                        :encoding {:y {:aggregate "average"
+                                       :field "beds"
+                                       :type "quantitative"
+                                       :axis {:title "No. of beds"
+                                              :titleColor "#85A9C5"}}}}]
+               :resolve {:scale {:y "independent"}}}))
+
+;; dual-axis line plot
+
+(oz/view!
+  (merge-with merge oz-config
+              {:data {:values state-population-and-beds}
+               :encoding {:x {:field "state"
+                              :axis {:domain false
+                                     :title "States"
+                                     :ticks false
+                                     :labelAngle 90
+                                     :labelPadding 10}
+                              :type "ordinal"}}
+               :layer [{:mark {:stroke "#85C5A6"
+                               :type "line"
+                               :interpolate "monotone"}
+                        :encoding {:y {:aggregate "average"
+                                       :field "population"
+                                       :type "quantitative"
+                                       :axis {:title "Population"
+                                              :titleColor "#85C5A6"}}}}
+                       {:mark {:stroke "#85A9C5"
+                               :type "line"
+                               :interpolate "monotone"}
+                        :encoding {:y {:aggregate "average"
+                                       :field "beds"
+                                       :type "quantitative"
+                                       :axis {:title "No. of beds"
+                                              :titleColor "#85A9C5"}}}}]
+               :resolve {:scale {:y "independent"}}}))

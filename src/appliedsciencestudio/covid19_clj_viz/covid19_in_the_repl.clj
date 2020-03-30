@@ -21,9 +21,9 @@
 ;; through an Oz server. Oz will open a browser window to display the
 ;; visualizations.
 (comment
-  (oz/start-server! 8082)
+  (oz/start-server! 8082))
 
-  )
+
 
 
 ;;;; ===========================================================================
@@ -112,9 +112,9 @@
                                                  :else          0)
                                  :cases-per-100k cases-per-100k)))
                       features)))
-       (json/write-value (java.io.File. "resources/public/public/data/china-provinces.geo.json")))
+       (json/write-value (java.io.File. "resources/public/public/data/china-provinces.geo.json"))))
 
-  )
+
 
 
 ;;;; ===========================================================================
