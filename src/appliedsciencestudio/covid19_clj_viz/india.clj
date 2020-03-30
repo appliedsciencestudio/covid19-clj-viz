@@ -1,7 +1,8 @@
 (ns appliedsciencestudio.covid19-clj-viz.india
   "Visualization of coronavirus situation in India.
 
-  Contributed by Noor Afshan Fathima."
+  Contributed by Noor Afshan Fathima.
+  Statewise Hospital Beds data in India aggregation was helped by Noor Khuthejatul Kubra and Faiz Ur Rahman"
   (:require [appliedsciencestudio.covid19-clj-viz.common :refer [applied-science-font
                                                                  oz-config
                                                                  applied-science-palette]]
