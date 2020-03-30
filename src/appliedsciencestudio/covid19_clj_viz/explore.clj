@@ -15,7 +15,9 @@
             [clojure.set :as set :refer [rename-keys]]))
 
 (comment
-  (oz/start-server! 8082))
+  (oz/start-server! 8082)
+
+  )
 
 
 
@@ -120,10 +122,10 @@
   (vals (take 10 (sort-by key #(compare %2 %1) (jh/new-daily-cases-in :confirmed "Germany"))))
   ;; (1477 1210 910 1597 170 451 281 136 241 129)
 
-  (vals (take 10 (sort-by key #(compare %2 %1) (jh/new-daily-cases-in :confirmed "Italy")))))
+  (vals (take 10 (sort-by key #(compare %2 %1) (jh/new-daily-cases-in :confirmed "Italy"))))
   ;; (3233 3590 3497 5198 0 2313 977 1797 1492 1247)
-  
 
+  )
 
 
 ;;;; ===========================================================================
@@ -142,8 +144,8 @@
                                     vals
                                     (into [])
                                     (map-indexed (fn [i n] {:cases n
-                                                            :country country
-                                                            :days-ago i}))))},
+                                                           :country country
+                                                           :days-ago i}))))},
               :mark {:type "bar" :size 24}
               :encoding {:x {:field "days-ago" :type "ordinal"
                              :sort "descending"}
@@ -151,6 +153,7 @@
                          :tooltip {:field "cases" :type "quantitative"}
                          :color {:field "country" :type "nominal"
                                  :scale {:range (mapv val applied-science-palette)}}}}))
+
 
 ;;;; ===========================================================================
 ;;;; Choropleth: European countries' COVID19 rate of infection
@@ -185,7 +188,9 @@
                                                    :rate (jh/rate-as-of :confirmed cntry 1))))
                                         features))))))
 
-  (jh/new-daily-cases-in :deaths "Andorra"))
+  (jh/new-daily-cases-in :deaths "Andorra")
+
+  )
 
 
 
@@ -206,7 +211,9 @@
 
 (comment
   ;; Let's look at the rate of change data
-  (sort-by second (map (juxt :country :confirmed-rate) (:features europe-infection-datapoints))))
+  (sort-by second (map (juxt :country :confirmed-rate) (:features europe-infection-datapoints)))
+
+  )
 
 
 

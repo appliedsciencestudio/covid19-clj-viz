@@ -8,7 +8,8 @@
    "Republic of Moldova" "Moldova"
    ;; "Faroe Islands"
    ;; "Holy See (Vatican City)"
-   "Czech Republic" "Czechia"})
+   "Czech Republic" "Czechia"
+   "Venezuela, RB" "Venezuela"})
 
 (def country-populations
   "From https://data.worldbank.org/indicator/SP.POP.TOTL

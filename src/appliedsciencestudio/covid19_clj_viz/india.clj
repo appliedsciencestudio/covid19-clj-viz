@@ -90,6 +90,7 @@
               {:title {:text "Current India COVID-19 Scenario"}
                :data {:name "india"
                       :values india-geojson-with-data
+                      ;; TODO find lower-resolution geoJSON to speed up loading
                       :format {:property "features"}},
                :mark {:type "geoshape" :stroke "white" :strokeWidth 1}
                :encoding {:color {:field "Cases-per-100k",

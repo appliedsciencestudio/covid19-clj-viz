@@ -1,7 +1,7 @@
 Agrigento,442049,AG
 Alessandria,426658,AL
 Ancona,474124,AN
-Aosta,126883,AO
+Valle d'Aosta/Vallée d'Aoste,126883,AO
 Arezzo,344374,AR
 Ascoli Piceno,209450,AP
 Asti,216677,AT
@@ -13,7 +13,7 @@ Benevento,279675,BN
 Bergamo,1109933,BG
 Biella,178551,BI
 Bologna,1009210,BO
-Bolzano,524256,BZ
+Bolzano/Bozen,524256,BZ
 Brescia,1262318,BS
 Brindisi,397083,BR
 Cagliari,430413,CA
@@ -51,7 +51,7 @@ Lodi,229338,LO
 Lucca,390042,LU
 Macerata,318921,MC
 Mantova,412610,MN
-Massa Carrara,196580,MS
+Massa-Carrara,196580,MS
 Matera,199685,MT
 Messina,636653,ME
 Milano,3218201,MI
@@ -109,5 +109,3 @@ Verona,921557,VR
 Vibo Valentia,161619,VV
 Vicenza,865082,VI
 Viterbo,319008,VT
-,,
-, ,

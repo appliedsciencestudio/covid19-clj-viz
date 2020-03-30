@@ -5,7 +5,10 @@
   {:pink   "#D46BC8"
    :green  "#38D996"
    :blue   "#4FADFF"
-   :purple "#9085DA"})
+   :purple "#9085DA"
+   ;; This gray is not normally part of our palette, but is useful for
+   ;; map visualizations for places without data:
+   :gray "#F3F3F3"})
 
 (def applied-science-font
   {:mono "IBM Plex Mono"

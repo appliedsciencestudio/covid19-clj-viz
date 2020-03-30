@@ -174,7 +174,7 @@
 (oz/view!
  (merge-with
   merge oz-config
-  {:title {:text "Confirmed COVID19 cases in China and Germanyxxx"}
+  {:title {:text "Confirmed COVID19 cases in China and Germany (on specific date)"}
    :width 650 :height 750
    ;; Here is the snippet of code the article examines in detail:
    :data {:values (let [date "2020-03-04"]
@@ -200,7 +200,10 @@
                   :sort "-x"}
               :color {:field "country" :type "ordinal"
                       :scale {:range [(:green applied-science-palette)
-                                      (:purple applied-science-palette)]}}}}))
+                                      (:purple applied-science-palette)]}}
+              :tooltip [{:field "province-state" :type "nominal"}
+                        {:field "country" :type "nominal"}
+                        {:field "cases" :type "quantitative"}]}}))
 
 
 ;;;; ===========================================================================
