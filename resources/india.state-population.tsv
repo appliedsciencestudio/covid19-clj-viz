@@ -1,37 +1,37 @@
-State	Population
-Uttar Pradesh	199812341
-Maharashtra	112374333
-Bihar	104099452
-West Bengal	91276115
-Madhya Pradesh	72626809
-Tamil Nadu	72147030
-Rajasthan	68548437
-Karnataka	61095297
-Gujarat	60439692
-Andhra Pradesh	49577103
-Orissa	41974218
-Telangana	35003674
-Kerala	33406061
-Jharkhand	32988134
-Assam	31205576
-Punjab	27743338
-Chhattisgarh	25545198
-Haryana	25351462
-Uttaranchal	10086292
-Himachal Pradesh	6864602
-Tripura	3673917
-Meghalaya	2966889
-Manipur	2570390
-Nagaland	1978502
-Goa	1458545
-Arunachal Pradesh	1383727
-Mizoram	1097206
-Sikkim	610577
-Delhi	16787941
-Jammu and Kashmir	12267032
-Puducherry	1247953
-Chandigarh	1055450
-Andaman and Nicobar	380581
-Dadra and Nagar Haveli	344000
-Lakshadweep	64473
-Daman and Diu	243247
+State	Population	Beds
+Uttar Pradesh	199812341	177552
+Maharashtra	112374333	135872
+Bihar	104099452	38330
+West Bengal	91276115	152628
+Madhya Pradesh	72626809	81566
+Tamil Nadu	72147030	193084
+Rajasthan	68548437	102754
+Karnataka	61095297	182114
+Gujarat	60439692	97946
+Andhra Pradesh	49577103	105363
+Orissa	41974218	43313
+Telangana	35003674	54546
+Kerala	33406061	105798
+Jharkhand	32988134	21911
+Assam	31205576	44547
+Punjab	27743338	41775
+Chhattisgarh	25545198	29745
+Haryana	25351462	32288
+Uttaranchal	10086292	21597
+Himachal Pradesh	6864602	24692
+Tripura	3673917	10616
+Meghalaya	2966889	9389
+Manipur	2570390	4063
+Nagaland	1978502	4232
+Goa	1458545	7171
+Arunachal Pradesh	1383727	5047
+Mizoram	1097206	4409
+Sikkim	610577	3612
+Delhi	16787941	58435
+Jammu and Kashmir	12267032	31356
+Puducherry	1247953	15736
+Chandigarh	1055450	4684
+Andaman and Nicobar	380581	2978
+Dadra and Nagar Haveli	344000	1157
+Lakshadweep	64473	550
+Daman and Diu	243247	558

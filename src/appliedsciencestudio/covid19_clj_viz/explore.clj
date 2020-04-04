@@ -12,8 +12,7 @@
             [clojure.set]
             [jsonista.core :as json]
             [oz.core :as oz]
-            [clojure.set :as set :refer [rename-keys]]
-            [appliedsciencestudio.covid19-clj-viz.india :as india]))
+            [clojure.set :as set :refer [rename-keys]]))
 
 (comment
   (oz/start-server! 8082)
